@@ -1,0 +1,27 @@
+name: Vérification BLS
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"  # Toutes les 30 minutes
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cloner le dépôt
+        uses: actions/checkout@v3
+
+      - name: Installer Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Installer les bibliothèques
+        run: pip install requests beautifulsoup4
+
+      - name: Lancer le script
+        run: python bls_checker.py
+        env:
+          EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
